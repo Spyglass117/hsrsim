@@ -20,6 +20,6 @@ on Python versions prior to 3.10 as some functionality relies on Match Case stat
 on an earlier version of Python, you are welcome to dig out those statements and replace them with if blocks provided you
 don't try and go back past 3.6 as F strings are used in essentially all output formatting. If you don't know what any of
 that means, are just here to simulate your own pulls, and/or do not want to bother setting up your own Python environment,
-go back to line 11.
+go back to the previous paragraph.
 
 Documentation for the code itself is provided in "main.py" and you can go read it there if you're a nerd.
