@@ -28,4 +28,4 @@ choice. In my limited testing, I have found that many online interpreters strugg
 works please let me know.
 
 Development of this simulator and the subsequent data compilation and reporting was extremely time consuming. Please consider supporting
-me using the Ko-Fi link on this page.
+me using the Ko-Fi link on the right side of this page.
