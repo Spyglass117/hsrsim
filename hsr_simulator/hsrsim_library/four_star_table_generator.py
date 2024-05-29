@@ -124,7 +124,7 @@ def run_till_off_banner_4star(copies, base_4star_chance = 5.1,
                               soft_pity_start_5star = 73,
                               featured_odds = 56.4,
                               five_guarantee = False, four_guarantee = False,
-                              total_4star_chars = 21, total_4star_cones = 38):
+                              total_4star_chars = 21, total_4star_cones = 21):
     """Simulate pulling until the specified number of copies of an on
     banner featured 4* entity are obtained.
 
