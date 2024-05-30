@@ -67,8 +67,10 @@ Attributes:
         start increasing.
     soft_pity_start_5star (int): The pull before when 5* drop rates
         start increasing.
-    featured_odds (float): The chances of pulling a featured 5*
-        instead of a standard 5* (percent). "50/50" odds.
+    four_featured_odds (float): If not guaranteed, the percent
+        chance that a drawn 4* will be the featured character.
+    five_featured_odds (float): If not guaranteed, the percent
+        chance that a drawn 5* will be the featured character.
     double_top_up (bool): Whether the first purchase bonus is
         available. Defaults to False.
     e_mode (bool): If False, attempts to minimize the dollar cost of
@@ -180,10 +182,10 @@ soft_pity_start_5star = 73
 # Define the odds of a drawn 5* being the featured entity. This variable
 # represents the "50/50" odds. Change this to 75.0 for light cones.
 # By default this is 56.4 to reflect pull data.
-featured_odds = 56.4
+five_featured_odds = 56.4
 
-
-
+# As above but for 4* units. Should be 50 for character or 75 for LC.
+four_featured_odds = 50
 
 # The variables above are designed to be edited by the end user. There
 # is limited error handling or input checking. You are welcome to check
@@ -195,9 +197,9 @@ featured_odds = 56.4
 def main(mode, target_number, target_pulls, multi_run, base_4star_chance,
          base_5star_chance, since_4star, since_5star, five_guarantee,
          four_guarantee, saved_pulls, soft_pity_start_4star,
-         soft_pity_start_5star, featured_odds, double_top_up, e_mode,
-         owned_4stars, e6_4stars, owned_standard_5stars, e6_5stars,
-         owned_feat1, owned_feat2, owned_feat3, banner_type):
+         soft_pity_start_5star, four_featured_odds, five_featured_odds, 
+         double_top_up, e_mode, owned_4stars, e6_4stars, owned_standard_5stars,
+         e6_5stars, owned_feat1, owned_feat2, owned_feat3, banner_type):
     """Conduct repeated Monte Carlo simulations of multiple HSR draws.
 
     Each call to the main method will run a number of trials equal to
@@ -261,8 +263,10 @@ def main(mode, target_number, target_pulls, multi_run, base_4star_chance,
             start increasing.
         soft_pity_start_5star (int): The pull before when 5* drop rates
             start increasing.
-        featured_odds (float): The chances of pulling a featured 5*
-            instead of a standard 5* (percent). "50/50" odds.
+        four_featured_odds (float): If not guaranteed, the percent
+            chance that a drawn 4* will be the featured character.
+        five_featured_odds (float): If not guaranteed, the percent
+            chance that a drawn 5* will be the featured character.
         double_top_up (bool): Whether the first purchase bonus is
             available. Defaults to False.
         e_mode (bool): If False, attempts to minimize the dollar cost of
@@ -306,7 +310,8 @@ def main(mode, target_number, target_pulls, multi_run, base_4star_chance,
     print(f"5* soft pity starting after: {soft_pity_start_5star}")
     print(f"Initial next 5* guaranteed to be featured: {five_guarantee}")
     print(f"Initial next 4* guaranteed to be featured: {four_guarantee}")
-    print(f"Chance of winning banner 5* w/o guarantee: {featured_odds}/100")
+    print(f"Chance of banner 5* w/o guarantee: {five_featured_odds}/100")
+    print(f"Chance of banner 4* w/o guarantee: {four_featured_odds}/100")
     print(f"Pulls already saved for banner: {saved_pulls}")
     print(f"First top-up bonus available in store: {double_top_up}")
     print(f"Purchase jade at best exchange rate: {e_mode}")
@@ -333,7 +338,8 @@ def main(mode, target_number, target_pulls, multi_run, base_4star_chance,
                               base_4star_chance, base_5star_chance,
                               since_4star, since_5star, five_guarantee, 
                               four_guarantee, soft_pity_start_4star, 
-                              soft_pity_start_5star, featured_odds)
+                              soft_pity_start_5star, four_featured_odds,
+                              five_featured_odds)
         running_total_pulls.append(run_result[0])
         running_num_3stars.append(run_result[1])
         running_num_other_4stars.append(run_result[2])
@@ -461,9 +467,10 @@ if __name__ == "__main__":
         main(mode, target_number, target_pulls, multi_run, base_4star_chance,
             base_5star_chance, since_4star, since_5star, five_guarantee, 
             four_guarantee, saved_pulls, soft_pity_start_4star,
-            soft_pity_start_5star, featured_odds, double_top_up, e_mode,
-            owned_4stars, e6_4stars, owned_standard_5stars, e6_5stars, 
-            owned_feat1, owned_feat2, owned_feat3, banner_type)
+            soft_pity_start_5star, four_featured_odds, five_featured_odds, 
+            double_top_up, e_mode, owned_4stars, e6_4stars,
+            owned_standard_5stars, e6_5stars,  owned_feat1, owned_feat2,
+            owned_feat3, banner_type)
     except Exception:
         print("Program execution halted due to exception.")
         print("This is a default error handling message indicating that "
