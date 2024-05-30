@@ -92,6 +92,28 @@ def dollar_cost(pulls, double_top_up = False, e_mode = False):
     return [cost_of_jade, leftover_jade]
 
 
+def costs(pulls):
+    """Return a list of jade and dollar costs for the specified pulls.
+
+    Args:
+        pulls (int): The number of pulls to output costs for.
+
+    Returns:
+        [int, int, float, float, float, float]: [pulls, jade cost, least 
+            expensive dollar cost, least expensive dollar cost with top
+            up bonus, most efficient dollar cost, most efficient dollar
+            cost with top up bonus]
+    """
+    jade = pulls * 160
+    least_expensive = dollar_cost(pulls, False, False)[0]
+    least_expensive_double = dollar_cost(pulls, True, False)[0]
+    most_efficient = dollar_cost(pulls, False, True)[0]
+    most_efficient_double = dollar_cost(pulls, True, True)[0]
+
+    return [pulls, jade, least_expensive, least_expensive_double,
+            most_efficient, most_efficient_double]
+
+
 def estimate_stardust(trial_data, owned_4stars, owned_5stars, e6_4stars,
                       e6_5stars, owned_feat1, owned_feat2, owned_feat3,
                       banner_type = "character"):

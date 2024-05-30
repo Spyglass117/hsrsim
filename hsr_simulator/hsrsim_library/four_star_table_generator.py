@@ -17,13 +17,12 @@ import random
 from sim_tools import pull, print_percentiles
 
 
-def run_till_on_banner_4star(copies, base_4star_chance = 5.1,
-                             base_5star_chance = 0.6,
-                             since_4star = 0, since_5star = 0,
-                             soft_pity_start_4star = 8,
-                             soft_pity_start_5star = 73,
-                             featured_odds = 56.4,
-                             five_guarantee = False, four_guarantee = False):
+def run_till_on_4star(copies, base_4star_chance = 5.1,
+                      base_5star_chance = 0.6, since_4star = 0, 
+                      since_5star = 0, soft_pity_start_4star = 8,
+                      soft_pity_start_5star = 73, four_featured_odds = 50.0,
+                      five_featured_odds = 56.4, five_guarantee = False,
+                      four_guarantee = False):
     """Simulate pulling until the specified number of copies of an on
     banner featured 4* entity are obtained.
 
@@ -41,8 +40,10 @@ def run_till_on_banner_4star(copies, base_4star_chance = 5.1,
             start increasing.
         soft_pity_start_5star (int): The pull before when 5* drop rates
             start increasing.
-        featured_odds (float): The chances of pulling a featured 5*
-            instead of a standard 5*. Represents 50/50 or 75/25 odds.
+        four_featured_odds (float): If not guaranteed, the percent
+            chance that a drawn 4* will be the featured character.
+        five_featured_odds (float): If not guaranteed, the percent
+            chance that a drawn 5* will be the featured character.
         five_guarantee (bool): Whether the next 5* drawn is guaranteed
             to be the featured banner 5*.
         four_guarantee (bool): Whether the next 4* drawn is guaranteed
@@ -50,7 +51,7 @@ def run_till_on_banner_4star(copies, base_4star_chance = 5.1,
 
     Returns:
         int: The number of pulls needed to reach the target number
-            of the target 4* character in this run.
+            of the target 4* entity in this run.
     """
     # Calculate the amount by which rates increase after every draw made
     # after crossing the soft pity thresholds. For all banners, these
@@ -79,7 +80,8 @@ def run_till_on_banner_4star(copies, base_4star_chance = 5.1,
 
         # Make one pull and update all relevant counters.
         pull_result = pull(current_4star_chance, current_5star_chance, 
-                           five_guarantee, four_guarantee, featured_odds)
+                           five_guarantee, four_guarantee, four_featured_odds,
+                           five_featured_odds)
         match pull_result:
             case "3*":
                 # Increment 4* and 5* pity trackers.
@@ -117,14 +119,13 @@ def run_till_on_banner_4star(copies, base_4star_chance = 5.1,
     return total_pulls
 
 
-def run_till_off_banner_4star(copies, base_4star_chance = 5.1,
-                              base_5star_chance = 0.6,
-                              since_4star = 0, since_5star = 0,
-                              soft_pity_start_4star = 8,
-                              soft_pity_start_5star = 73,
-                              featured_odds = 56.4,
-                              five_guarantee = False, four_guarantee = False,
-                              total_4star_chars = 21, total_4star_cones = 21):
+def run_till_off_4star(copies, base_4star_chance = 5.1,
+                       base_5star_chance = 0.6, since_4star = 0,
+                       since_5star = 0, soft_pity_start_4star = 8,
+                       soft_pity_start_5star = 73, four_featured_odds = 50.0,
+                       five_featured_odds = 56.4, five_guarantee = False,
+                       four_guarantee = False, total_4star_chars = 21, 
+                       total_4star_cones = 23):
     """Simulate pulling until the specified number of copies of an on
     banner featured 4* entity are obtained.
 
@@ -142,8 +143,10 @@ def run_till_off_banner_4star(copies, base_4star_chance = 5.1,
             start increasing.
         soft_pity_start_5star (int): The pull before when 5* drop rates
             start increasing.
-        featured_odds (float): The chances of pulling a featured 5*
-            instead of a standard 5*. Represents 50/50 or 75/25 odds.
+        four_featured_odds (float): If not guaranteed, the percent
+            chance that a drawn 4* will be the featured character.
+        five_featured_odds (float): If not guaranteed, the percent
+            chance that a drawn 5* will be the featured character.
         five_guarantee (bool): Whether the next 5* drawn is guaranteed
             to be the featured banner 5*.
         four_guarantee (bool): Whether the next 4* drawn is guaranteed
@@ -155,7 +158,7 @@ def run_till_off_banner_4star(copies, base_4star_chance = 5.1,
 
         Returns:
             int: The number of pulls needed to reach the target number
-                of the target 4* character in this run.
+                of the target 4* entity in this run.
     """
     # Calculate the amount by which rates increase after every draw made
     # after crossing the soft pity thresholds. For all banners, these
@@ -188,7 +191,8 @@ def run_till_off_banner_4star(copies, base_4star_chance = 5.1,
 
         # Make one pull and update all relevant counters.
         pull_result = pull(current_4star_chance, current_5star_chance, 
-                           five_guarantee, four_guarantee, featured_odds)
+                           five_guarantee, four_guarantee, four_featured_odds,
+                           five_featured_odds)
         match pull_result:
             case "3*":
                 # Increment 4* and 5* pity trackers.
@@ -229,78 +233,138 @@ def run_till_off_banner_4star(copies, base_4star_chance = 5.1,
 def main():
     """Refer to module docstring for main method documentation.
     """
-    def simulate_on_banner(copies):
+    def simulate_on_banner_char(copies):
         # Helper function to repeatedly simulate pulling the specified
-        # copies of the target on banner 4* and return a list to be
+        # copies of the target on banner 4* char and return a list to be
         # passed to print_percentiles().
         running_total_pulls = []
         for run in range(100000):
-            running_total_pulls.append(run_till_on_banner_4star(copies))
+            running_total_pulls.append(run_till_on_4star(copies))
         return running_total_pulls
     
-    def simulate_off_banner(copies):
+    def simulate_off_banner_char(copies):
         # Helper function to repeatedly simulate pulling the specified
-        # copies of the target off banner 4* and return a list to be
+        # copies of the target off banner 4* char and return a list to
+        # be passed to print_percentiles().
+        running_total_pulls = []
+        for run in range(100000):
+            running_total_pulls.append(run_till_off_4star(copies))
+        return running_total_pulls
+    
+    def simulate_on_banner_lc(copies):
+        # Helper function to repeatedly simulate pulling the specified
+        # copies of the target on banner 4* lc and return a list to be
         # passed to print_percentiles().
         running_total_pulls = []
         for run in range(100000):
-            running_total_pulls.append(run_till_off_banner_4star(copies))
+            running_total_pulls.append(run_till_on_4star(copies, 6.6, 0.8, 0,
+                                                         0, 7, 65, 75, 75))
         return running_total_pulls
     
+    def simulate_off_banner_lc(copies):
+        # Helper function to repeatedly simulate pulling the specified
+        # copies of the target off banner 4* lc and return a list to be
+        # passed to print_percentiles().
+        running_total_pulls = []
+        for run in range(100000):
+            running_total_pulls.append(run_till_off_4star(copies, 6.6, 0.8, 0,
+                                                          0, 7, 65, 75, 75))
+        return running_total_pulls
+
     print("E0 ON")
-    print_percentiles(simulate_on_banner(1))
+    print_percentiles(simulate_on_banner_char(1))
     print()
 
     print("E1 ON")
-    print_percentiles(simulate_on_banner(2))
+    print_percentiles(simulate_on_banner_char(2))
     print()
 
     print("E2 ON")
-    print_percentiles(simulate_on_banner(3))
+    print_percentiles(simulate_on_banner_char(3))
     print()
 
     print("E3 ON")
-    print_percentiles(simulate_on_banner(4))
+    print_percentiles(simulate_on_banner_char(4))
     print()
 
     print("E4 ON")
-    print_percentiles(simulate_on_banner(5))
+    print_percentiles(simulate_on_banner_char(5))
     print()
 
     print("E5 ON")
-    print_percentiles(simulate_on_banner(6))
+    print_percentiles(simulate_on_banner_char(6))
     print()
 
     print("E6 ON")
-    print_percentiles(simulate_on_banner(7))
+    print_percentiles(simulate_on_banner_char(7))
     print()
 
     print("E0 OFF")
-    print_percentiles(simulate_off_banner(1))
+    print_percentiles(simulate_off_banner_char(1))
     print()
 
     print("E1 OFF")
-    print_percentiles(simulate_off_banner(2))
+    print_percentiles(simulate_off_banner_char(2))
     print()
 
     print("E2 OFF")
-    print_percentiles(simulate_off_banner(3))
+    print_percentiles(simulate_off_banner_char(3))
     print()
 
     print("E3 OFF")
-    print_percentiles(simulate_off_banner(4))
+    print_percentiles(simulate_off_banner_char(4))
     print()
 
     print("E4 OFF")
-    print_percentiles(simulate_off_banner(5))
+    print_percentiles(simulate_off_banner_char(5))
     print()
 
     print("E5 OFF")
-    print_percentiles(simulate_off_banner(6))
+    print_percentiles(simulate_off_banner_char(6))
     print()
 
     print("E6 OFF")
-    print_percentiles(simulate_off_banner(7))
+    print_percentiles(simulate_off_banner_char(7))
+    print()
+
+    print("S1 ON")
+    print_percentiles(simulate_on_banner_lc(1))
+    print()
+
+    print("S2 ON")
+    print_percentiles(simulate_on_banner_lc(2))
+    print()
+
+    print("S3 ON")
+    print_percentiles(simulate_on_banner_lc(3))
+    print()
+
+    print("S4 ON")
+    print_percentiles(simulate_on_banner_lc(4))
+    print()
+
+    print("S5 ON")
+    print_percentiles(simulate_on_banner_lc(5))
+    print()
+
+    print("S1 OFF")
+    print_percentiles(simulate_off_banner_lc(1))
+    print()
+
+    print("S2 OFF")
+    print_percentiles(simulate_off_banner_lc(2))
+    print()
+
+    print("S3 OFF")
+    print_percentiles(simulate_off_banner_lc(3))
+    print()
+
+    print("S4 OFF")
+    print_percentiles(simulate_off_banner_lc(4))
+    print()
+
+    print("S5 OFF")
+    print_percentiles(simulate_off_banner_lc(5))
     print()
 
 
