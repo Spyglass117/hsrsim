@@ -8,7 +8,7 @@ import numpy as np
 
 
 def pull(current_4star_chance, current_5star_chance, five_guarantee,
-         four_guarantee, featured_odds):
+         four_guarantee, four_featured_odds, five_featured_odds):
     """Based on current draw weights, 50/50 odds, and guarantee status,
     determine the outcome of a single pull.
 
@@ -21,9 +21,10 @@ def pull(current_4star_chance, current_5star_chance, five_guarantee,
             banner character.
         four_guarantee (bool): Whether any drawn 4* will be one of the 
             featured 4*s.
-        featured_odds (float):
-            If not guaranteed, the percent chance that a drawn 5* will
-                be the featured banner character.
+        four_featured_odds (float): If not guaranteed, the percent
+            chance that a drawn 4* will be the featured character.
+        five_featured_odds (float): If not guaranteed, the percent
+            chance that a drawn 5* will be the featured character.
 
     Returns:
         str: one of "3*", "4*", "featured 4*", "5*", and "featured 5*"
@@ -33,12 +34,12 @@ def pull(current_4star_chance, current_5star_chance, five_guarantee,
 
     # Calculate and output roll result and reset rates as needed.
     if roll <= current_5star_chance:
-        if five_guarantee or random.uniform(0, 100) <= featured_odds:
+        if five_guarantee or random.uniform(0, 100) <= five_featured_odds:
             return "featured 5*"
         return "5*"
     elif roll <= current_4star_chance:
         # 50/50 to pull featured 4*.
-        if four_guarantee or random.getrandbits(1):
+        if four_guarantee or random.uniform(0, 100) <= four_featured_odds:
             return "featured 4*"
         return "4*"
     else:
@@ -48,7 +49,7 @@ def pull(current_4star_chance, current_5star_chance, five_guarantee,
 def run_once(mode, target_number, target_pulls, base_4star_chance,
              base_5star_chance, since_4star, since_5star, five_guarantee,
              four_guarantee, soft_pity_start_4star, soft_pity_start_5star,
-             featured_odds):
+             four_featured_odds, five_featured_odds):
     """Run one trial of the simulation, terminating when either the
     target number of featured 5*s are drawn or when the target pulls are
     reached, depending on the mode selected.
@@ -76,8 +77,10 @@ def run_once(mode, target_number, target_pulls, base_4star_chance,
             start increasing.
         soft_pity_start_5star (int): The pull before when 5* drop rates
             start increasing.
-        featured_odds (float): The chances of pulling a featured 5*
-            instead of a standard 5*. Represents 50/50 or 75/25 odds.
+        four_featured_odds (float): If not guaranteed, the percent
+            chance that a drawn 4* will be the featured character.
+        five_featured_odds (float): If not guaranteed, the percent
+            chance that a drawn 5* will be the featured character.
 
     Returns:
         [int, int, int, int, int, int]: [total pulls, number of 3*s,
@@ -116,7 +119,8 @@ def run_once(mode, target_number, target_pulls, base_4star_chance,
 
         # Make one pull and update all relevant counters.
         pull_result = pull(current_4star_chance, current_5star_chance, 
-                           five_guarantee, four_guarantee, featured_odds)
+                           five_guarantee, four_guarantee, four_featured_odds,
+                           five_featured_odds)
         match pull_result:
             case "3*":
                 # Increment 4* and 5* pity trackers.

@@ -37,11 +37,11 @@ def print_percentiles_for_level(char_copies, cone_copies, multi_run):
     for run in range(multi_run):
         # Determine pulls needed for target number of character copies.
         char_run_result = run_once("to number", char_copies, 0, 5.1, 0.6, 0, 0,
-                                   False, 8, 73, 56.4)
+                                   False, 8, 73, 50.0, 56.4)
         pulls_to_char = char_run_result[0]
         # Determine pulls needed for target number of light cone copies.
         cone_run_result = run_once("to number", cone_copies, 0, 6.6, 0.8, 0, 0,
-                                   False, 7, 65, 75.0)
+                                   False, 7, 65, 75.0, 75.0)
         pulls_to_cone = cone_run_result[0]
         # Determine total pulls needed for target level.
         total_pulls = pulls_to_char + pulls_to_cone
