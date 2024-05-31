@@ -103,7 +103,7 @@ from hsrsim_library.sim_calculators import dollar_cost, estimate_stardust
 # continue pulling until the target_number of featured 5* entities are 
 # drawn. If mode is set to "to pulls" in each trial the simulation will
 # pull the specified number of times.
-mode = "to pulls"
+mode = "to number"
 target_number = 1
 target_pulls = 90
 
