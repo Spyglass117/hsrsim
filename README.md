@@ -26,6 +26,3 @@ You will need to copy and past the contents of the sim_calculators.py and sim_to
 delete the import statements that reference those folders at the top of that file, then copy and paste the code into your interpreter of
 choice. In my limited testing, I have found that many online interpreters struggle with the numpy dependency, but if you find one that
 works please let me know.
-
-Development of this simulator and the subsequent data compilation and reporting was extremely time consuming. Please consider supporting
-me using the Ko-Fi link on the right side of this page.
