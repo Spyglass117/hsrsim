@@ -18,7 +18,7 @@ Python environment you intend to run the code in. 'math' and 'random' should be 
 program, you will need to open the Anaconda Powershell Prompt application installed with Miniconda and type "conda install numpy"
 and "conda install matplotlib". If you encounter any issues, there are plenty of getting started with Python resources available
 online; any method of installing Python will work as long as you have an up to date version and the required modules. The whole
-process should only take a few minutes, but if you're really struggling, shoot me a message on Reddit and I'll do my best to help
+process should only take a few minutes, but if you're really struggling, shoot me an email and I'll do my best to help
 you troubleshoot.
 
 If you don't want to bother setting up a local python environment, you may be able to find an online interpreter to run this code in.
